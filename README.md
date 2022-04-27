@@ -50,6 +50,11 @@ unless explicitly noted otherwise.
   https://rustup.rs/, https://nodejs.org/en/download/package-manager/,
   https://docs.docker.com/get-docker/). You may already have some of these
   installed; that's OK, but make sure you have a recent version.
+* Make sure that you have Rust >= 1.60. You can check your Rust version by running this:
+```
+$ rustc --version
+rustc 1.60.0 (7737e0b5c 2022-04-04)
+```
 * Install Terra-specific tools. We are going to use Testnet (a.k.a. as
   `bombay-12`), so you don't need to worry about LocalTerra if you see it
   mentioned online. Something like this should install everything you need:
@@ -80,7 +85,7 @@ npm install scripts/
 * Copy the file `keys.terrain.js.sample` to `keys.terrain.js`. Then add your new private key to `keys.terrain.js`. Just add a new entry called
   "myKey" (or whatever name you want, really) similar to the keys that are
   already there. You'll need to remember the name "myKey" for later commands.
-  `keys.terrain.js` should NEVER be pushed to public repo (that is why it is in `.gitignore`) to avoid leaking your new private key! You
+  `keys.terrain.js` should NEVER be pushed to a public repo (that is why it is in `.gitignore`) to avoid leaking your new private key! You
   should treat your private key just like a password since anyone that has it
   will be able to take your balance from the blockchain. NEVER publish your
   private keys, even if they are only used on testnet!
@@ -122,7 +127,7 @@ contract is created on the blockchain, and usually you only want one copy. (You
 can update an existing copy if you modify your code. This is called migrating a
 contract and is explained later).
 
- There are two things you need to do:
+ There are three things you need to do:
 
 1) First, update the file called `config.<contract name>.json`. For example, if
    you want to deploy the `cw20_token`, update `config.cw20_token.json`. You
@@ -131,7 +136,8 @@ contract and is explained later).
    you understand what this data means! If you don't understand it, ask around.
    Do not blindly deploy the contract without changing the `InstantiateMsg`
    section; otherwise you'll run into trouble later.
-2) Run these commands to deploy it to Testnet:
+2) Make sure your wallet has some UST (it's needed to pay for the deployment). You can get some UST by using https://faucet.terra.money/ to send yourself some Luna, then use the Terra Station Chrome extension to convert that Luna to UST (or use `scripts/native/convert-luna-to-ust.js`; see instructions on how to run the scripts in `scripts/` later).
+3) Run these commands to deploy it to Testnet:
 
 ```bash
 CONTRACT_NAME=cw20_token # Replace this with whatever contract you want to deploy
@@ -171,7 +177,7 @@ commands instead:
 CONTRACT_NAME=cw20_token # Replace this with whatever contract you want to deploy
 SIGNER=sampleKey1 # Replace with the name of your key from keys.terrain.js.
 ./build_optimized_wasm.sh
-npx @terra-money/terrain contract:migrate $CONTRACT_NAME --signer $SGNER --network testnet --config-path config.$CONTRACT_NAME.json
+npx @terra-money/terrain contract:migrate $CONTRACT_NAME --signer $SIGNER --network testnet --config-path config.$CONTRACT_NAME.json
 ```
 
 When you migrate a contract like this, the `migrate` Rust method of your
@@ -180,22 +186,31 @@ whatever data is stored in the contract to be compatible with the new code.
 
 ### Running scripts inside `scripts/`
 
-These are handy scripts that will let you test your contracts, build automation,
-etc. To run them, just do something like this:
+The `scripts/` directory contains handy scripts that will let you test your contracts, build automation, run one-time operations, etc.
 
-```
+First, copy your private key to `scripts/library.js` (private keys in this file can be imported from other files in the `scripts/` directory, so having your private key in this file will make your life easier since you don't need to copy it to all scripts. Keep in mind that not all scripts need a private key -- public operations like querying a smart contract don't require a private key).
+
+Then run any script you want with this:
+
+```bash
 cd scripts/
+# You only need to run npm install the first time, to make sure you have all JS dependencies installed.
 npm install
+
+# This is the important line that actually executes the script.
 node scripts/native/generate-new-wallet.js
 ```
 
-All the scripts are extremely simple and take no flags. Just open them and
-change whatever you need (e.g. use a different amount or a different address).
+All the scripts are very simple and take no flags. Just open them and
+change whatever you need (e.g. use a different amount, a different wallet, a different contract address, etc).
 
-This is really more of a playground. You can modify them, copy them, extend
-them, add flags, or whatever makes sense to you. In my case, I just open them,
-change the amount/contract address and run them again. I find that simpler than
-fiddling with flags, but you can do whatever you want.
+These scripts are meant to be a playground. You can modify them, copy them,
+extend them, chain them, add flags, or whatever makes sense to you. In my case,
+I just open them, change the amount/contract address and run them. I find that
+simpler than fiddling with flags, but you can change them to do whatever makes
+your life easier.
+
+You can also use these scripts as inspiration to build more sophisticated automation, like an off-chain oracle for example. If you want to do that, the most important file to read is `scripts/library.js`; this is were we initialize the `LCDClient` object (the actual JavaScript object that we use to hit the Terra HTTP API).
 
 ## Homework
 

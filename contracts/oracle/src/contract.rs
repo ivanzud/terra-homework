@@ -22,9 +22,10 @@ pub fn instantiate(
         price: msg.price,
         owner: info.sender.clone(),
     };
-    // if msg.price < 0 {
-    //     return Err(ContractError::PriceInstantiationError {});
-    // }
+    if msg.price < 0u64 {
+        return Err(ContractError::PriceInstantiationError {});
+    }
+
 
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
     STATE.save(deps.storage, &state)?;
@@ -58,6 +59,9 @@ pub fn try_update_price(
     STATE.update(deps.storage, |mut state| -> Result<_, ContractError> {
         if info.sender != state.owner {
             return Err(ContractError::Unauthorized {});
+        }
+        if price < 0u64 {
+            return Err(ContractError::PriceInstantiationError {});
         }
         state.price = price;
         Ok(state)

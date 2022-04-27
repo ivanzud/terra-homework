@@ -1,14 +1,21 @@
+<<<<<<< HEAD
 import fetch from "isomorphic-fetch";
 import { Coins, LCDClient } from "@terra-money/terra.js";
 const gasPrices = await fetch("https://bombay-fcd.terra.dev/v1/txs/gas_prices");
 const gasPricesCoins = new Coins(await gasPrices.json());
+=======
+import fetch from 'isomorphic-fetch';
+import { Coins, LCDClient } from '@terra-money/terra.js';
+const gasPrices =  await fetch('https://bombay-fcd.terra.dev/v1/txs/gas_prices');
+const gasPricesJson = await gasPrices.json();
+>>>>>>> b52d585d02aabfd277c0e5f9821f8c73a7040015
 
 // LCD stands for "Light Client Daemon". I don't really know much about it, but
 // this is how you talk to Terra from JS.
 const client = new LCDClient({
   URL: "https://bombay-lcd.terra.dev/", // Use "https://lcd.terra.dev" for prod "http://localhost:1317" for localterra.
   chainID: "bombay-12", // Use "columbus-5" for production or "localterra".
-  gasPrices: gasPricesCoins,
+  gasPrices: { uluna: gasPricesJson['uluna'] }, // Always pay fees in Luna. You can change this to pay fees in other currencies like UST, if you prefer.
   gasAdjustment: "1.5", // Increase gas price slightly so transactions go through smoothly.
   gas: 10000000,
 });
