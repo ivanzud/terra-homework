@@ -29,19 +29,41 @@ pub fn instantiate(
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn execute(
-    _deps: DepsMut,
+    deps: DepsMut,
     _env: Env,
     _info: MessageInfo,
-    _msg: ExecuteMsg,
+    msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
     // TODO
-    Err(ContractError::NotImplemented {})
+    match msg {
+        ExecuteMsg::Buy {} => try_buy(deps),
+        ExecuteMsg::Withdraw {amount} => try_withdraw(deps, amount),
+    }
+    // Err(ContractError::NotImplemented {})
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn migrate(_deps: DepsMut, _env: Env, _msg: Empty) -> StdResult<Response> {
     // TODO
     Ok(Response::default())
+}
+  // Attempts to buy Lemons. Caller must pass some Luna with this ExecuteMsg
+  // and should receive some Lemons in exchange. This contract keeps the Luna.
+  // Internally, this method queries the price from the Oracle contract, then
+  // computes how many Lemons to send to the buyer (according to the current
+  // price and how much Luna they sent).
+  // Fails if this contract doesn't own enough Lemons in the CW20 contract.
+  // Public endpoint (anyone can call).
+
+pub fn try_buy(_deps: DepsMut) -> Result<Response, ContractError> {
+    
+
+    Ok(Response::new())
+}
+
+pub fn try_withdraw(_deps: DepsMut, amount: i32) -> Result<Response, ContractError> {
+    // TODO
+    Ok(Response::new())
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]

@@ -1,6 +1,6 @@
-import fetch from 'isomorphic-fetch';
-import { Coins, LCDClient } from '@terra-money/terra.js';
-const gasPrices =  await fetch('https://bombay-fcd.terra.dev/v1/txs/gas_prices');
+import fetch from "isomorphic-fetch";
+import { Coins, LCDClient } from "@terra-money/terra.js";
+const gasPrices = await fetch("https://bombay-fcd.terra.dev/v1/txs/gas_prices");
 const gasPricesCoins = new Coins(await gasPrices.json());
 
 // LCD stands for "Light Client Daemon". I don't really know much about it, but
@@ -13,16 +13,27 @@ const client = new LCDClient({
   gas: 10000000,
 });
 
-
-import { MnemonicKey } from '@terra-money/terra.js';
+import { MnemonicKey } from "@terra-money/terra.js";
 
 const wallets = {
-  wallet1: client.wallet(new MnemonicKey({
-    mnemonic: "confirm electric wink vocal nut flat globe machine gown million develop quiz dune bar coil favorite need skin iron husband mutual shoulder depth today",
-  })),
-  wallet2: client.wallet(new MnemonicKey({
-    mnemonic: "warm lucky circle bicycle quote lemon omit one robot include fruit fix coach parrot identify glance foil random fox tornado diagram twist flat picnic",
-  })),
+  wallet1: client.wallet(
+    new MnemonicKey({
+      mnemonic:
+        "confirm electric wink vocal nut flat globe machine gown million develop quiz dune bar coil favorite need skin iron husband mutual shoulder depth today",
+    })
+  ),
+  wallet2: client.wallet(
+    new MnemonicKey({
+      mnemonic:
+        "warm lucky circle bicycle quote lemon omit one robot include fruit fix coach parrot identify glance foil random fox tornado diagram twist flat picnic",
+    })
+  ),
+  myKey: client.wallet(
+    new MnemonicKey({
+      mnemonic:
+        "toss then message unknown finger core plate essence express desk tiger prison inner borrow clip way naive member civil lobster scatter deer witness force",
+    })
+  ),
 };
 
 export { client, wallets };

@@ -7,15 +7,15 @@
       }
     },
     "oracle": {
-      "codeId": "66273",
+      "codeId": "67756",
       "contractAddresses": {
-        "default": "terra1yhlp5zxct4cm0raud2hl72sa6qqejejmehua2q"
+        "default": "terra1zhj5qxf7ar4g0zypt5fx66x8q32qyjcjsgrw2w"
       }
     },
     "cw20_token": {
-      "codeId": "66205",
+      "codeId": "67538",
       "contractAddresses": {
-        "default": "terra1hpajld8zs93md8zrs6sfy42zl0khqpmr07muw0"
+        "default": "terra1nue8z238kq683yqe5806wthec9l3rpj50zdfkw"
       }
     },
     "swap": {
