@@ -27,6 +27,7 @@ optimize = """docker run --rm -v "$(pwd)":/code \
 """
 
 [dependencies]
+terraswap = { version = "2.4.0"}
 cosmwasm-storage = { version = "0.16.0" }
 cw-storage-plus = "0.8.0"
 cw0 = "0.8.1"

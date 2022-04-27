@@ -15,4 +15,7 @@ pub enum ContractError {
 
     #[error("Not implemented")]
     NotImplemented {},
+
+    #[error("Not enouhg funds")]
+    NotEnoughFunds {},
 }
